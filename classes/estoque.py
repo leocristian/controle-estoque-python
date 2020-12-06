@@ -18,7 +18,7 @@ class Estoque():
         achou = False
         for p in Estoque._produtos:
             if(p.nome == produto.nome.upper()):
-                p.qtd +=1
+                p.qtd += produto.qtd
                 achou = True
                 self._historico.append("Armazenamento de {} recebido. quantidade atual: {}".format(p.nome,p.qtd))
         if(not achou):
@@ -59,6 +59,9 @@ e1 = Estoque()
 
 p1 = Produto('nescau','um pote de nescau',12.5,2)
 e1.armazenar(p1)
+
+p2 = Produto('nescau','um pote de nescau',12.5,2)
+e1.armazenar(p2)
 
 p3 = Produto('farinha','um pote de farinha',12.5,1)
 e1.armazenar(p3)
