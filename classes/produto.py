@@ -1,11 +1,17 @@
+from random import randint
+
+
 class Produto():
+
+    _idNum = randint(0,60000)
     __slots__ = ['_id','_nome','_descricao','_preco','_qtd']
-    def __init__(self, id, nome,descricao,preco,qtd)
-        self._id = id
-        self._nome = nome
+    def __init__(self,nome,descricao,preco,qtd):
+        self._id = Produto._idNum
+        self._nome = nome.upper()
         self._descricao = descricao
         self._preco = preco
         self._qtd = qtd 
+        Produto._idNum+=1
 
     @property
     def id(self):
@@ -13,7 +19,7 @@ class Produto():
 
     @id.setter
     def id(self,id):
-        self._id = foto
+        self._id = id
 
     @property
     def nome(self):
