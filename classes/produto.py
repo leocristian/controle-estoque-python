@@ -1,6 +1,6 @@
 class Produto():
     __slots__ = ['_id','_nome','_descricao','_preco','_qtd']
-    def __init__(self, id, nome,descricao,preco,qtd)
+    def __init__(self, id, nome,descricao,preco,qtd):
         self._id = id
         self._nome = nome
         self._descricao = descricao
@@ -13,7 +13,7 @@ class Produto():
 
     @id.setter
     def id(self,id):
-        self._id = foto
+        self._id = id
 
     @property
     def nome(self):
