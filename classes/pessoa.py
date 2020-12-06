@@ -33,6 +33,14 @@ class Pessoa():
     @endereco.setter
     def endereco(self, endereco):
         self._endereco = endereco
+
+    @property
+    def idade(self):
+        return self._idade
+
+    @idade.setter
+    def idade(self, idade):
+        self._idade = idade
     
     @property
     def telefone(self):
@@ -41,3 +49,11 @@ class Pessoa():
     @telefone.setter
     def telefone(self, telefone):
         self._telefone = telefone
+    
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, email):
+        self._email = email
