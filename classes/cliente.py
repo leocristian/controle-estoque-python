@@ -5,6 +5,7 @@ class Cliente():
 
     _idCliente = 0
     __slots__ = ['_pessoa']
+    _listaProdutos = []
 
     def __init__(self, _pessoa):
         self._pessoa = _pessoa
