@@ -1,11 +1,7 @@
-import produto
-from produto import *
-import pessoa
-from pessoa import *
-import estoque
-from estoque import *
-import cliente
-from cliente import *
+from produto import Produto
+from pessoa import Pessoa
+from estoque import Estoque
+from cliente import Cliente
 
 class Funcionario():
 
@@ -25,18 +21,17 @@ class Funcionario():
         #estoque.listar()
     
     def cadastrarCliente(self, cliente):
-        # pessoa = Pessoa(nome, cpf, end, tel, idade, email)
-        # cliente = Cliente(pessoa)
         Funcionario._listaClientes.append(cliente)
 
     def venderProduto(self, cliente, produto):
         print("venda:")
         cliente._listaProdutos.append(produto)
         print(cliente._listaProdutos[0].nome)
-        # estoque = Estoque()
-        # estoque.remover(produto.nome, 1)
+        estoque = Estoque()
+        estoque.remover(produto.nome, 1)
 
     def listarClientes(self):
+        print("Lista de clientes:")
         for cliente in Funcionario._listaClientes:
             print(cliente._pessoa.nome)
 
@@ -58,8 +53,8 @@ f1.cadastroProduto('miojo', 'um miojo', 1.75)
 prod1 = Produto('arroz', 'branco', 2.90, 2)
 
 p3 = Pessoa('joao', '567', 'dfdf', '53656', 23, 'joao@gmail.com')
-c1 = Cliente(p3)
 
+c1 = Cliente(p3)
 f1.cadastrarCliente(c1)
 
 f1.listarClientes()
