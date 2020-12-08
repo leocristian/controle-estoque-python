@@ -1,4 +1,3 @@
-import estoque
 from estoque import *
 
 class Cliente():
