@@ -11,6 +11,7 @@ class Funcionario():
 
     _idFuncionario = 0
     __slots__ = ['_pessoa']
+    _listaClientes = []
 
     def __init__(self, _pessoa):
         self._pessoa = _pessoa
@@ -23,17 +24,21 @@ class Funcionario():
         estoque.armazenar(produto)
         #estoque.listar()
     
-    def cadastrarCliente(self, nome, cpf, end, tel, idade, email):
-        listaCliente = []
-        pessoa = Pessoa(nome, cpf, end, tel, idade, email)
-        cliente = Cliente(pessoa)
-        listaCliente.append(cliente)
+    def cadastrarCliente(self, cliente):
+        # pessoa = Pessoa(nome, cpf, end, tel, idade, email)
+        # cliente = Cliente(pessoa)
+        Funcionario._listaClientes.append(cliente)
 
-    def venderProduto(self, produto):
-        pass
+    def venderProduto(self, cliente, produto):
+        print("venda:")
+        cliente._listaProdutos.append(produto)
+        print(cliente._listaProdutos[0].nome)
+        # estoque = Estoque()
+        # estoque.remover(produto.nome, 1)
 
-    def listarClientes(self, listaCliente):
-        pass
+    def listarClientes(self):
+        for cliente in Funcionario._listaClientes:
+            print(cliente._pessoa.nome)
 
     def getAtributos(self):
         print("-" * 10)
@@ -55,9 +60,11 @@ prod1 = Produto('arroz', 'branco', 2.90, 2)
 p3 = Pessoa('joao', '567', 'dfdf', '53656', 23, 'joao@gmail.com')
 c1 = Cliente(p3)
 
-c1.verProdutos()
+f1.cadastrarCliente(c1)
 
-#f1.venderProduto(p1)
+f1.listarClientes()
+
+f1.venderProduto(c1, prod1)
 
 # f1.getAtributos()
 # f2.getAtributos()
