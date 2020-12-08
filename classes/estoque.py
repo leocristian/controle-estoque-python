@@ -55,19 +55,19 @@ class Estoque():
 
 
 
-e1 = Estoque()
+# e1 = Estoque()
 
-p1 = Produto('nescau','um pote de nescau',12.5,2)
-e1.armazenar(p1)
+# p1 = Produto('nescau','um pote de nescau',12.5,2)
+# e1.armazenar(p1)
 
-p2 = Produto('nescau','um pote de nescau',12.5,2)
-e1.armazenar(p2)
+# p2 = Produto('nescau','um pote de nescau',12.5,2)
+# e1.armazenar(p2)
 
-p3 = Produto('farinha','um pote de farinha',12.5,1)
-e1.armazenar(p3)
+# p3 = Produto('farinha','um pote de farinha',12.5,1)
+# e1.armazenar(p3)
 
 
-e1.remover('nescau',2)
-e1.listar()
+# e1.remover('nescau',2)
+# e1.listar()
 
-e1.mostraHistorico()
+# e1.mostraHistorico()
