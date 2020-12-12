@@ -6,12 +6,29 @@ from cliente import Cliente
 class Funcionario():
 
     _idFuncionario = 0
-    __slots__ = ['_pessoa']
+    __slots__ = ['_pessoa','_id']
     _listaClientes = []
 
     def __init__(self, _pessoa):
         self._pessoa = _pessoa
+        self._id = Funcionario._idFuncionario
         Funcionario._idFuncionario += 1
+    
+    @property
+    def pessoa(self):
+        return self._pessoa
+
+    @pessoa.setter
+    def pessoa(self, pessoa):
+        self._pessoa = pessoa
+    
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        self._id = id
 
     def cadastroProduto(self, nome, descricao, preco):
         qtd = 1
@@ -41,7 +58,7 @@ class Funcionario():
         print(f"CPF: {self._pessoa.cpf}")
         print("-" * 10)
 
-p1 = Pessoa("leonardo", '123', 'aaa', '234', 21, 'leo@gmail.com')
+'''p1 = Pessoa("leonardo", '123', 'aaa', '234', 21, 'leo@gmail.com')
 f1 = Funcionario(p1)
 
 p2 = Pessoa("Cristian", '321', 'bbb', '84756', 24, 'cc@gmail.com')
@@ -62,6 +79,6 @@ f1.listarClientes()
 f1.venderProduto(c1, prod1)
 
 # f1.getAtributos()
-# f2.getAtributos()
+# f2.getAtributos()'''
 
 

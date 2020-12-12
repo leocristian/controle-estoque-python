@@ -44,7 +44,7 @@ class Estoque():
                 else:
                     print("não foi possivel efetuar operação estoque do protudo em falta")
 
-    def buscar(self,produto):
+    def buscar(self,produtoName):
         achou = False
         for p in Estoque._produtos:
             if(p.nome == produtoName.upper() and p.qtd > 0):
