@@ -30,10 +30,8 @@ class Funcionario():
     def id(self, id):
         self._id = id
 
-    def cadastroProduto(self, nome, descricao, preco):
-        qtd = 1
+    def cadastroProduto(self, nome, descricao, preco, qtd, estoque):
         produto = Produto(nome, descricao, preco, qtd)
-        estoque = Estoque()
         estoque.armazenar(produto)
         #estoque.listar()
     
