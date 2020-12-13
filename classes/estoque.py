@@ -42,7 +42,7 @@ class Estoque():
                     p.qtd -= qtdRetirar
                     self._historico.append("Remoção de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
                 else:
-                    print("não foi possivel efetuar operação estoque do protudo em falta")
+                    print("não foi possivel efetuar operação, quantidade no estoque inferior a solicitada")
 
     def buscar(self,produtoName):
         achou = False

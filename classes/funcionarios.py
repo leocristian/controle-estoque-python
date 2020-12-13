@@ -38,12 +38,10 @@ class Funcionario():
     def cadastrarCliente(self, cliente):
         Funcionario._listaClientes.append(cliente)
 
-    def venderProduto(self, cliente, produto):
-        print("venda:")
-        cliente._listaProdutos.append(produto)
-        print(cliente._listaProdutos[0].nome)
-        estoque = Estoque()
-        estoque.remover(produto.nome, 1)
+    def venderProduto(self, produto, qtd, estoque):
+        # cliente._listaProdutos.append(produto)
+        # print(cliente._listaProdutos[0].nome)
+        estoque.remover(produto, qtd)
 
     def listarClientes(self):
         print("Lista de clientes:")

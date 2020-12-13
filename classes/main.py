@@ -16,7 +16,7 @@ def listFuncionarios(funcList):
 
     print("**************** LISTA FUNCIONARIOS *******************")
     for i in funcList:
-        print(f"ID: {i.id}-- Nome: {i.pessoa.nome}")
+        print(f"ID: {i.id} -- Nome: {i.pessoa.nome}")
     
     esc = int(input("Selecione um funcionário pelo ID: "))
 
@@ -37,6 +37,14 @@ def cadPessoa():
 
     return p
 
+def venda(funcionario,estoque):
+    print('Estoque: ')
+    estoque.listar()
+    print('-------------')
+    nomeProduto = input("Nome do produto a ser vendido: ")
+    qtd = int(input("quantidade: "))
+    funcionario.venderProduto(nomeProduto,qtd,estoque)
+
 def cadProduto(funcionario,estoque):
 
     print("**************** CADASTRO DE PRODUTO *******************")
@@ -50,7 +58,7 @@ def cadProduto(funcionario,estoque):
     
 def menuFuncionario():
 
-    print("*********** MENU FUNCIONÁRIO ************")
+    print("\n*********** MENU FUNCIONÁRIO ************")
     print("-----------------------------------------")
     print("------- 0 - VOLTAR ----------------------")
     print("------- 1 - CADASTRAR CLIENTE -----------")
@@ -58,6 +66,7 @@ def menuFuncionario():
     print("------- 3 - CADASTRAR PRODUTO -----------")
     print("------- 4 - VENDER PRODUTO --------------")
     print("------- 5 - LISTAR PRODUTOS -------------")
+    print("------- 6 - HISTORICO DO ESTOQUE --------")
     print("-----------------------------------------")
     print("*****************************************")
     
@@ -67,7 +76,7 @@ def menuFuncionario():
 
 def menuPrincipal():
 
-    print("**************** MENU *******************")
+    print("\n**************** MENU *******************")
     print("-----------------------------------------")
     print("------- 0 - SAIR ------------------------")
     print("------- 1 - CADASTRAR FUNCIONÁRIO -------")
@@ -117,10 +126,16 @@ def main():
                     elif(escF == 3):
                         os.system('clear'or 'cls')
                         cadProduto(FuncLogado,estoque)
+                    elif(escF == 4):
+                        os.system('clear'or 'cls')
+                        venda(FuncLogado,estoque)
                     elif(escF == 5):
                         os.system('clear'or 'cls')
                         print("Produtos cadastrados")
                         estoque.listar()
+                    elif(escF == 6):
+                        os.system('clear'or 'cls')
+                        estoque.mostraHistorico()
                     else:
                         break
 
