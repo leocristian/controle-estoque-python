@@ -9,6 +9,10 @@ class Estoque():
         self._data_abertura = datetime.datetime.today()
         self._historico = []
 
+    @property
+    def produtos(self):
+        return Estoque._produtos
+
     def mostraHistorico(self):
         print("A data de abertuda do estoque é: {}".format(self._data_abertura))
         for t in self._historico:

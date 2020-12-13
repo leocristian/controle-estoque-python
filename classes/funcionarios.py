@@ -14,6 +14,10 @@ class Funcionario():
         self._id = Funcionario._idFuncionario
         Funcionario._idFuncionario += 1
     
+    # @property
+    # def listaclientes(self):
+    #     return Funcionario._listaClientes
+
     @property
     def pessoa(self):
         return self._pessoa
@@ -38,15 +42,22 @@ class Funcionario():
     def cadastrarCliente(self, cliente):
         Funcionario._listaClientes.append(cliente)
 
-    def venderProduto(self, produto, qtd, estoque):
-        # cliente._listaProdutos.append(produto)
-        # print(cliente._listaProdutos[0].nome)
+    def venderProduto(self, produto, qtd, estoque, idCliente):
+        
+        for cliente in Funcionario._listaClientes:
+            if(cliente.id == idCliente):
+                cliente.listaProdutos.append(produto)
         estoque.remover(produto, qtd)
 
+    @property
+    def listaClientes(self):
+        return Funcionario._listaClientes
+
+    
     def listarClientes(self):
         print("Lista de clientes:")
         for cliente in Funcionario._listaClientes:
-            print(cliente._pessoa.nome)
+            print(f"ID: {cliente.id} -- Nome: {cliente._pessoa.nome}")
 
     def getAtributos(self):
         print("-" * 10)

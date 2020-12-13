@@ -38,12 +38,14 @@ def cadPessoa():
     return p
 
 def venda(funcionario,estoque):
+    funcionario.listarClientes()
+    idclient = int(input("Selecione um cliente pelo ID: "))
     print('Estoque: ')
     estoque.listar()
     print('-------------')
     nomeProduto = input("Nome do produto a ser vendido: ")
     qtd = int(input("quantidade: "))
-    funcionario.venderProduto(nomeProduto,qtd,estoque)
+    funcionario.venderProduto(nomeProduto,qtd,estoque, idclient)
 
 def cadProduto(funcionario,estoque):
 
@@ -128,7 +130,10 @@ def main():
                         cadProduto(FuncLogado,estoque)
                     elif(escF == 4):
                         os.system('clear'or 'cls')
-                        venda(FuncLogado,estoque)
+                        if( len(FuncLogado.listaClientes) > 0 and len(estoque.produtos) > 0):
+                            venda(FuncLogado,estoque)
+                        else:
+                            print("Sem clientes ou produtos cadastrados no sistema")
                     elif(escF == 5):
                         os.system('clear'or 'cls')
                         print("Produtos cadastrados")
