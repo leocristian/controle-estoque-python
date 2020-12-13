@@ -38,40 +38,11 @@ class Estoque():
                 print("quantidade: ",p.qtd)
 
     def remover(self,produtoName,qtdRetirar):
-        achou = False
+
         for p in Estoque._produtos:
             if(p.nome == produtoName.upper()):
-                achou = True
                 if(qtdRetirar <= p.qtd):
                     p.qtd -= qtdRetirar
                     self._historico.append("Remoção de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
                 else:
                     print("não foi possivel efetuar operação, quantidade no estoque inferior a solicitada")
-
-    def buscar(self,produtoName):
-        achou = False
-        for p in Estoque._produtos:
-            if(p.nome == produtoName.upper() and p.qtd > 0):
-                return p
-
-        if(not achou):
-            return False
-
-
-
-# e1 = Estoque()
-
-# p1 = Produto('nescau','um pote de nescau',12.5,2)
-# e1.armazenar(p1)
-
-# p2 = Produto('nescau','um pote de nescau',12.5,2)
-# e1.armazenar(p2)
-
-# p3 = Produto('farinha','um pote de farinha',12.5,1)
-# e1.armazenar(p3)
-
-
-# e1.remover('nescau',2)
-# e1.listar()
-
-# e1.mostraHistorico()

@@ -66,27 +66,3 @@ class Funcionario():
         print(f"CPF: {self._pessoa.cpf}")
         print("-" * 10)
 
-'''p1 = Pessoa("leonardo", '123', 'aaa', '234', 21, 'leo@gmail.com')
-f1 = Funcionario(p1)
-
-p2 = Pessoa("Cristian", '321', 'bbb', '84756', 24, 'cc@gmail.com')
-f2 = Funcionario(p2)
-
-f1.cadastroProduto('arroz', 'branco', 2.90)
-f1.cadastroProduto('miojo', 'um miojo', 1.75)
-
-prod1 = Produto('arroz', 'branco', 2.90, 2)
-
-p3 = Pessoa('joao', '567', 'dfdf', '53656', 23, 'joao@gmail.com')
-
-c1 = Cliente(p3)
-f1.cadastrarCliente(c1)
-
-f1.listarClientes()
-
-f1.venderProduto(c1, prod1)
-
-# f1.getAtributos()
-# f2.getAtributos()'''
-
-
