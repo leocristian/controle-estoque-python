@@ -15,6 +15,10 @@ class Cliente():
     def id(self):
         return self._id
 
+    @property
+    def pessoa(self):
+        return self._pessoa
+
     @id.setter
     def id(self,id):
         self._id = id
@@ -22,10 +26,6 @@ class Cliente():
     @property
     def listaProdutos(self):
         return self._listaProdutos
-
-    # @listaProdutos.setter
-    # def listaProdutos(self,nomeProduto):
-    #     self._listaProdutos.append(nomeProduto)
     
     def verProdutos(self):
         estoque = Estoque()

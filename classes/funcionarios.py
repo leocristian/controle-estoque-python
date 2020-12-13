@@ -47,6 +47,7 @@ class Funcionario():
         for cliente in Funcionario._listaClientes:
             if(cliente.id == idCliente):
                 cliente.listaProdutos.append(produto)
+                print(f"{produto} vendido para: {cliente.pessoa.nome}")
         estoque.remover(produto, qtd)
 
     @property
