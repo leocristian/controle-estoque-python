@@ -10,7 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
+class venderProduto(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(996, 600)
@@ -58,12 +58,12 @@ class Ui_MainWindow(object):
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(690, 390, 91, 20))
         self.label_6.setObjectName("label_6")
-        self.cadastrarFuncionario = QtWidgets.QPushButton(self.centralwidget)
-        self.cadastrarFuncionario.setGeometry(QtCore.QRect(500, 480, 89, 25))
-        self.cadastrarFuncionario.setObjectName("cadastrarFuncionario")
-        self.cadastrarVoltar = QtWidgets.QPushButton(self.centralwidget)
-        self.cadastrarVoltar.setGeometry(QtCore.QRect(380, 480, 89, 25))
-        self.cadastrarVoltar.setObjectName("cadastrarVoltar")
+        self.btnVender = QtWidgets.QPushButton(self.centralwidget)
+        self.btnVender.setGeometry(QtCore.QRect(500, 480, 89, 25))
+        self.btnVender.setObjectName("btnVender")
+        self.btnVoltar = QtWidgets.QPushButton(self.centralwidget)
+        self.btnVoltar.setGeometry(QtCore.QRect(380, 480, 89, 25))
+        self.btnVoltar.setObjectName("btnVoltar")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -81,15 +81,15 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "Selecionar Cliente pelo ID:"))
         self.label_5.setText(_translate("MainWindow", "Selecionar Produto pelo nome:"))
         self.label_6.setText(_translate("MainWindow", "Quantidade:"))
-        self.cadastrarFuncionario.setText(_translate("MainWindow", "Vender"))
-        self.cadastrarVoltar.setText(_translate("MainWindow", "Voltar"))
+        self.btnVender.setText(_translate("MainWindow", "Vender"))
+        self.btnVoltar.setText(_translate("MainWindow", "Voltar"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = venderProduto()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

@@ -15,6 +15,8 @@ from cadastrar_cliente_tela import cadastrar_cliente
 from cadastrar_produto_tela import cadastroProduto
 from listar_clientes_tela import listarClientes
 from listar_produtos_tela import listarProdutos
+from vender_produto_tela import venderProduto
+
 from classes.cliente import Cliente
 from classes.funcionarios import Funcionario
 from classes.pessoa import Pessoa
@@ -36,6 +38,7 @@ class Ui_Main(QtWidgets.QWidget):
         self.stack5 = QtWidgets.QMainWindow()
         self.stack6 = QtWidgets.QMainWindow()
         self.stack7 = QtWidgets.QMainWindow()
+        self.stack8 = QtWidgets.QMainWindow()
 
         self.tela_inicial = Tela_Inicial()
         self.tela_inicial.setupUi(self.stack0)
@@ -61,6 +64,9 @@ class Ui_Main(QtWidgets.QWidget):
         self.listar_produtos_tela = listarProdutos()
         self.listar_produtos_tela.setupUi(self.stack7)
 
+        self.vender_produto_tela = venderProduto()
+        self.vender_produto_tela.setupUi(self.stack8)
+
         self.QtStack.addWidget(self.stack0)
         self.QtStack.addWidget(self.stack1)
         self.QtStack.addWidget(self.stack2)
@@ -69,6 +75,7 @@ class Ui_Main(QtWidgets.QWidget):
         self.QtStack.addWidget(self.stack5)
         self.QtStack.addWidget(self.stack6)
         self.QtStack.addWidget(self.stack7)
+        self.QtStack.addWidget(self.stack8)
 
 
 class Main(QMainWindow, Ui_Main):
@@ -98,6 +105,8 @@ class Main(QMainWindow, Ui_Main):
         self.menufuncionario.btnListarClientes.clicked.connect(self.telaClientes)
         self.menufuncionario.btnCadProduto.clicked.connect(self.telaCadastroProduto)
         self.menufuncionario.btnListarProduto.clicked.connect(self.telaProdutos)
+        self.menufuncionario.btnVender.clicked.connect(self.telaVenderProduto)
+        
 
         self.cadastrar_produto_tela.cadastrarFuncionario.clicked.connect(self.cadastroDeProduto)
 
@@ -143,6 +152,7 @@ class Main(QMainWindow, Ui_Main):
     def telaCadastroProduto(self):
         self.QtStack.setCurrentIndex(6)
         self.cadastrar_produto_tela.cadastrarVoltar.clicked.connect(self.voltarMenuFuncionario)
+
     def telaProdutos(self):
         self.listar_produtos_tela.listWidget.clear()
         if(len(self.estoque.produtos) == 0):
@@ -154,11 +164,12 @@ class Main(QMainWindow, Ui_Main):
                 self.listar_produtos_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.nome}")
             
             self.listar_produtos_tela.btnVoltar.clicked.connect(self.voltarMenuFuncionario)
+
     def cadastrarProduto(self):
         nome = self.cadastrar_produto_tela.lineEdit.text()
         desc = self.cadastrar_produto_tela.lineEdit_2.text()
         preco = self.cadastrar_produto_tela.lineEdit_3.text()
-        qtd = self.cadastrar_produto_tela.lineEdit_4.text()
+        qtd = int(self.cadastrar_produto_tela.lineEdit_4.text())
         prod = None
         if not(nome == '' or desc == '' or preco == '' or qtd == ''):
             prod = Produto(nome, desc, preco, qtd)
@@ -168,6 +179,7 @@ class Main(QMainWindow, Ui_Main):
             self.cadastrar_produto_tela.lineEdit_3.setText('')
             self.cadastrar_produto_tela.lineEdit_4.setText('')
         return prod
+
     def cadastroDeProduto(self):
         prod = self.cadastrarProduto()
         if prod == None:
@@ -175,7 +187,55 @@ class Main(QMainWindow, Ui_Main):
         else:
             self.estoque.armazenar(prod)
             print(prod.nome, prod.preco)
+#--------------------------------------------------------------------------- TELA VENDER PRODUTO
 
+    def vendaProduto(self):
+
+        verif = 0
+
+        ID = self.vender_produto_tela.lineEdit.text()
+        nomeP = self.vender_produto_tela.lineEdit_2.text()
+        qtd = self.vender_produto_tela.lineEdit_3.text()
+
+
+        if not(ID == '' or nomeP == '' or qtd == ''):
+            qtd = int(qtd)
+            ID = int(ID)
+            for i in self.clientList:
+                if ID == i.id:
+                    verif = self.estoque.remover(nomeP, qtd)
+                    self.vender_produto_tela.lineEdit.setText('')
+                    self.vender_produto_tela.lineEdit_2.setText('')
+                    self.vender_produto_tela.lineEdit_3.setText('')
+            if(verif == 1):
+                QMessageBox.information(None,'POO2','Produto Vendido!')
+            else:
+                QMessageBox.information(None,'POO2','ERRO! Operação não concluida. Verifique os dados inseridos.')
+                
+                
+    def telaVenderProduto(self):
+        self.vender_produto_tela.listWidget.clear()
+        self.vender_produto_tela.listWidget_2.clear()
+
+        if(len(self.estoque.produtos) == 0 or len(self.clientList) == 0):
+            QMessageBox.information(None,'POO2','Sem produtos ou clientes cadastrados!')
+        else:
+            self.QtStack.setCurrentIndex(8)
+            for i in self.estoque.produtos:
+                print(i.nome)
+                self.vender_produto_tela.listWidget_2.addItem(f"Nome: {i.nome} -- Qtd: {i.qtd}")
+
+            for x in self.clientList:
+                print(x.pessoa.nome)
+                self.vender_produto_tela.listWidget.addItem(f"ID: {x.id} -- Nome: {x.pessoa.nome}")
+                
+            self.vendaProduto()
+
+
+            self.vender_produto_tela.btnVender.clicked.connect(self.telaVenderProduto)
+            self.vender_produto_tela.btnVoltar.clicked.connect(self.voltarMenuFuncionario)
+
+#------------------------------------------------------------------------------------------------------
     def cadastrodeCliente(self):
         p1 = self.cadPessoaCliente()
         if p1 == None:
@@ -209,6 +269,7 @@ class Main(QMainWindow, Ui_Main):
                 self.funcionarios_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.pessoa.nome}")
 
             self.funcionarios_tela.btnEscolherFunc.clicked.connect(self.abrirMenuFuncionario)
+
     def telaClientes(self):
         self.listar_clientes_tela.listWidget.clear()
         if(len(self.clientList) == 0):

@@ -38,11 +38,13 @@ class Estoque():
                 print("quantidade: ",p.qtd)
 
     def remover(self,produtoName,qtdRetirar):
-
+        verif = 0
         for p in Estoque._produtos:
             if(p.nome == produtoName.upper()):
                 if(qtdRetirar <= p.qtd):
                     p.qtd -= qtdRetirar
                     self._historico.append("Remoção de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
+                    verif = 1
                 else:
                     print("não foi possivel efetuar operação, quantidade no estoque inferior a solicitada")
+        return verif
