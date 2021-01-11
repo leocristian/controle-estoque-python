@@ -2,15 +2,13 @@
 
 # Form implementation generated from reading ui file 'historico_estoque_tela.ui'
 #
-# Created by: PyQt5 UI code generator 5.14.1
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
-class Ui_MainWindow(object):
+class Historico(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(764, 480)
@@ -47,7 +45,8 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Historico()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+

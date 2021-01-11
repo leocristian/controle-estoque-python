@@ -14,9 +14,11 @@ class Estoque():
         return Estoque._produtos
 
     def mostraHistorico(self):
-        print("A data de abertuda do estoque é: {}".format(self._data_abertura))
+        his = []
+        his.append("A data de abertuda do estoque é: {}".format(self._data_abertura))
         for t in self._historico:
-            print('- ',t)
+            his.append('- {}'.format(t))
+        return his
 
     def armazenar(self,produto):
         achou = False

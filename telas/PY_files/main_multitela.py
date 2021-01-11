@@ -16,6 +16,7 @@ from cadastrar_produto_tela import cadastroProduto
 from listar_clientes_tela import listarClientes
 from listar_produtos_tela import listarProdutos
 from vender_produto_tela import venderProduto
+from historico_estoque_tela import Historico
 
 from classes.cliente import Cliente
 from classes.funcionarios import Funcionario
@@ -39,6 +40,7 @@ class Ui_Main(QtWidgets.QWidget):
         self.stack6 = QtWidgets.QMainWindow()
         self.stack7 = QtWidgets.QMainWindow()
         self.stack8 = QtWidgets.QMainWindow()
+        self.stack9 = QtWidgets.QMainWindow()
 
         self.tela_inicial = Tela_Inicial()
         self.tela_inicial.setupUi(self.stack0)
@@ -67,6 +69,9 @@ class Ui_Main(QtWidgets.QWidget):
         self.vender_produto_tela = venderProduto()
         self.vender_produto_tela.setupUi(self.stack8)
 
+        self.historico_estoque = Historico()
+        self.historico_estoque.setupUi(self.stack9)
+
         self.QtStack.addWidget(self.stack0)
         self.QtStack.addWidget(self.stack1)
         self.QtStack.addWidget(self.stack2)
@@ -76,6 +81,7 @@ class Ui_Main(QtWidgets.QWidget):
         self.QtStack.addWidget(self.stack6)
         self.QtStack.addWidget(self.stack7)
         self.QtStack.addWidget(self.stack8)
+        self.QtStack.addWidget(self.stack9)
 
 
 class Main(QMainWindow, Ui_Main):
@@ -106,9 +112,13 @@ class Main(QMainWindow, Ui_Main):
         self.menufuncionario.btnCadProduto.clicked.connect(self.telaCadastroProduto)
         self.menufuncionario.btnListarProduto.clicked.connect(self.telaProdutos)
         self.menufuncionario.btnVender.clicked.connect(self.telaVenderProduto)
+        self.menufuncionario.btnHistorico.clicked.connect(self.telaVerHistorico)
+        self.historico_estoque.btnVoltar.clicked.connect(self.voltarMenuFuncionarios)
         
 
         self.cadastrar_produto_tela.cadastrarFuncionario.clicked.connect(self.cadastroDeProduto)
+
+
 
     def cadPessoa(self):
 
@@ -313,6 +323,18 @@ class Main(QMainWindow, Ui_Main):
 
     def voltarTelaCadastro(self):
         self.QtStack.setCurrentIndex(0)
+
+    def telaVerHistorico(self):
+        self.QtStack.setCurrentIndex(9)
+        self.historico_estoque.listWidget.clear()
+        his = self.estoque.mostraHistorico()
+        # self.historico_estoque.listView.appendRow(f"{text}")
+        for t in his:
+            self.historico_estoque.listWidget.addItem(f"{t}")
+
+
+    def voltarMenuFuncionarios(self):
+        self.QtStack.setCurrentIndex(3)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
