@@ -171,7 +171,7 @@ class Main(QMainWindow, Ui_Main):
             self.QtStack.setCurrentIndex(7)
             for i in self.estoque.produtos:
                 print(i.nome)
-                self.listar_produtos_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.nome}")
+                self.listar_produtos_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.nome} -- Qtd: {i.qtd} -- Preco: {i.preco}")
             
             self.listar_produtos_tela.btnVoltar.clicked.connect(self.voltarMenuFuncionario)
 
