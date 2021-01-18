@@ -24,11 +24,26 @@ from classes.pessoa import Pessoa
 from classes.estoque import Estoque
 from classes.produto import Produto
 
+__author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
+__licence__= "GPL"
+__email__= "leonardosclopes@gmail.com"
+__version__= "1.0.0.1"
+
+'''
+    A classe Ui_main eh responsavel por fazer o gerenciamento de todas as telas
+'''
+
 class Ui_Main(QtWidgets.QWidget):
     def setupUi(self, Main):
         Main.setObjectName('Main')
         Main.resize(640,480)
-
+        
+        '''
+            Atributos
+            ____
+            QtStack: Uma pilha contendo todas as telas do sistema
+            
+        '''
         self.QtStack = QtWidgets.QStackedLayout()
 
         self.stack0 = QtWidgets.QMainWindow()
@@ -83,7 +98,10 @@ class Ui_Main(QtWidgets.QWidget):
         self.QtStack.addWidget(self.stack8)
         self.QtStack.addWidget(self.stack9)
 
-
+'''
+    A classe main é responsável pelo controle dos botões,
+    dos dados que serão mostrados em cada tela 
+'''
 class Main(QMainWindow, Ui_Main):
     def __init__(self, parent=None):
 
@@ -92,8 +110,16 @@ class Main(QMainWindow, Ui_Main):
 
         self.funcList = []
         self.clientList = []
-
         self.estoque = Estoque()
+
+        '''
+            Atributos
+            ____
+            funcList: Uma lista de todos os funcionários
+            clientList: Uma lista de todos os clientes
+            estoque: Objeto do tipo estoque que ira armazenar os produtos cadastrados
+        '''
+
         self.tela_inicial.btnEntrar.clicked.connect(self.abrirTelaEntrar)
         self.tela_inicial.btnCadastrar.clicked.connect(self.abrirTelaCadastrarFuncionario)
 
@@ -119,9 +145,15 @@ class Main(QMainWindow, Ui_Main):
         self.cadastrar_produto_tela.cadastrarFuncionario.clicked.connect(self.cadastroDeProduto)
 
 
-
     def cadPessoa(self):
+        '''
+            Metodo responsavel por cadastrar um objeto do tipo pessoa
+            com os atributos digitados pelo usuario na tela de cadastrar funionarios
 
+            Retorno
+            ____
+            p: Objeto da classe Pessoa
+        '''
         nome = self.cadastrar_funcionario.lineEdit.text()
         cpf = self.cadastrar_funcionario.lineEdit_2.text()
         end = self.cadastrar_funcionario.lineEdit_3.text()
@@ -141,6 +173,14 @@ class Main(QMainWindow, Ui_Main):
 
         return p
     def cadPessoaCliente(self):
+        '''
+            Metodo responsavel por cadastrar um objeto do tipo pessoa
+            com os atributos da classe Pessoa digitados pelo usuario na tela de cadastrar clientes
+            
+            Retorno
+            ____
+            p: Objeto da classe Pessoa
+        '''
         nome = self.cadastrar_cliente_tela.lineEdit.text()
         cpf = self.cadastrar_cliente_tela.lineEdit_2.text()
         end = self.cadastrar_cliente_tela.lineEdit_3.text()
@@ -164,6 +204,9 @@ class Main(QMainWindow, Ui_Main):
         self.cadastrar_produto_tela.cadastrarVoltar.clicked.connect(self.voltarMenuFuncionario)
 
     def telaProdutos(self):
+        '''
+            Metodo responsavel por mostrar os produtos que estao no estoque
+        '''
         self.listar_produtos_tela.listWidget.clear()
         if(len(self.estoque.produtos) == 0):
             QMessageBox.information(None,'POO2','Sem produtos cadastrados!')
@@ -176,6 +219,13 @@ class Main(QMainWindow, Ui_Main):
             self.listar_produtos_tela.btnVoltar.clicked.connect(self.voltarMenuFuncionario)
 
     def cadastrarProduto(self):
+        '''
+            metodo responsavel por armazenar os atributos digitados pelo usuario na tela de cadastrar produtos
+
+            Retorno
+            ____
+            prod: Objeto da classe Produto
+        '''
         nome = self.cadastrar_produto_tela.lineEdit.text()
         desc = self.cadastrar_produto_tela.lineEdit_2.text()
         preco = self.cadastrar_produto_tela.lineEdit_3.text()
@@ -191,6 +241,9 @@ class Main(QMainWindow, Ui_Main):
         return prod
 
     def cadastroDeProduto(self):
+        '''
+            Metodo responsavel por armazenar o produto no estoque
+        '''
         prod = self.cadastrarProduto()
         if prod == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
@@ -200,7 +253,15 @@ class Main(QMainWindow, Ui_Main):
 #--------------------------------------------------------------------------- TELA VENDER PRODUTO
 
     def vendaProduto(self):
+        '''
+            Metodo reponsavel por realizar o a venda de um produto a um cliente
 
+            Atributos
+            ____
+            ID: Variavel inteira que ira guardar o id do cliente a qual o produto sera vendido
+            nomeP: String que ira armazenar o nome do produto
+            qtd: Variavel inteira que ira armazenar a quantidade de produtos para venda
+        '''
         verif = 0
 
         ID = self.vender_produto_tela.lineEdit.text()
@@ -247,6 +308,9 @@ class Main(QMainWindow, Ui_Main):
 
 #------------------------------------------------------------------------------------------------------
     def cadastrodeCliente(self):
+        '''
+            Metodo reponsavel por armazenar o cliente na lista de clientes
+        '''
         p1 = self.cadPessoaCliente()
         if p1 == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
@@ -258,7 +322,9 @@ class Main(QMainWindow, Ui_Main):
             self.cadastrar_cliente_tela.cadastrarVoltar.clicked.connect(self.voltarMenuFuncionario)
 
     def CadastrorDeFuncionario(self):
-        
+        '''
+            Metodo reponsavel por armazenar o funcionario na lista de funcionarios
+        '''
         p1 = self.cadPessoa()
         if p1 == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
@@ -270,6 +336,9 @@ class Main(QMainWindow, Ui_Main):
         self.QtStack.setCurrentIndex(1)
         
     def EscolherFuncionario(self):
+        '''
+            Metodo reponsavel por exibir os funcionarios na tela
+        '''
         self.funcionarios_tela.listWidget.clear()
         if(len(self.funcList) == 0):
                 #self.funcionarios_tela.listWidget.addItem('Sem funcionários cadastrados!')
@@ -281,6 +350,9 @@ class Main(QMainWindow, Ui_Main):
             self.funcionarios_tela.btnEscolherFunc.clicked.connect(self.abrirMenuFuncionario)
 
     def telaClientes(self):
+        '''
+            Metodo responsavel por exibir os clientes na tela
+        '''
         self.listar_clientes_tela.listWidget.clear()
         if(len(self.clientList) == 0):
             QMessageBox.information(None,'POO2','Sem clientes cadastrados!')
@@ -293,6 +365,10 @@ class Main(QMainWindow, Ui_Main):
             
 
     def abrirMenuFuncionario(self):
+        '''
+            Metodo reponsavel por abrir a tela do funcionario escolhido pelo usuario
+        '''
+
         escolha = int(self.funcionarios_tela.lineEdit.text())
 
         funcEscolhido = self.retornaFunc(escolha)
@@ -306,6 +382,14 @@ class Main(QMainWindow, Ui_Main):
         self.QtStack.setCurrentIndex(3)
 
     def retornaFunc(self, escolha):
+        '''
+            Metodo responsavel por armazenar um funcinario escolhido pelo usuario
+
+            retorno
+            ____
+            i: Objeto do tipo Funcionario
+        '''
+
         for i in self.funcList:
             if (i.id == escolha):
                 return i
