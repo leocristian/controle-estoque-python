@@ -1,6 +1,15 @@
 import datetime
 from .produto import Produto
 
+__author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
+__licence__= "GPL"
+__email__= "vinicius.lucas@ufpi.edu.br"
+__version__= "1.0.0.1"
+
+'''
+    A Classe Estoque cria um objeto do tipo Estoque
+'''
+
 class Estoque():
     _qtdProdutos = 0
     _produtos = []
@@ -9,16 +18,38 @@ class Estoque():
         self._data_abertura = datetime.datetime.today()
         self._historico = []
 
+        '''
+           Atributos
+           ____
+           data_abertura: variavel do tipo time
+           _historico: lista de operacoes realizadas 
+        '''  
+
     @property
     def produtos(self):
         return Estoque._produtos
 
     def mostraHistorico(self):
         his = []
-        his.append("A data de abertuda do estoque é: {}".format(self._data_abertura))
+        his.append("A data de abertuda do estoque e: {}".format(self._data_abertura))
         for t in self._historico:
             his.append('- {}'.format(t))
         return his
+    '''
+        Funcao mostraHistorico retorna o historico de operacoes realizadas
+
+        Parametros
+        ____
+        sem parametros alem do self
+        ____
+        Variaveis
+        ____
+        his: lista que vai armazenar o Historico
+        ____
+        Retorno
+        ____
+        his: Retorna a lista contendo todo o Historico de operacoes
+    '''    
 
     def armazenar(self,produto):
         achou = False
@@ -30,6 +61,21 @@ class Estoque():
         if(not achou):
             Estoque._produtos.append(produto)
             self._historico.append("Novo produto armazenado, {} recebido. quantidade atual: {}".format(produto.nome.upper(),produto.qtd))
+    '''
+        Funcao armazenar objetos produtos dentro da lista de produtos e atualiza a operacao feita no historico
+
+        Parametros
+        ____
+        produto: Objeto do tipo produto
+        ____
+        Variaveis
+        ____
+        achou: Variavel do tipo Boolena
+        ____
+        Retorno
+        ____
+        Sem Retornos
+    '''    
 
     def listar(self):
         for p in Estoque._produtos:
@@ -39,14 +85,38 @@ class Estoque():
                 print("Nome: ",p.nome)
                 print("quantidade: ",p.qtd)
 
+        '''
+            Funcao listar mostra na tela as informacoes de cada produto armazado no estoque
+
+            Parametros
+            ____
+            sem parametros alem do self
+            ____
+            Variaveis
+            ____
+            p: variavel do tipo Produto
+        '''
+
     def remover(self,produtoName,qtdRetirar):
         verif = 0
         for p in Estoque._produtos:
             if(p.nome == produtoName.upper()):
                 if(qtdRetirar <= p.qtd):
                     p.qtd -= qtdRetirar
-                    self._historico.append("Remoção de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
+                    self._historico.append("Remocao de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
                     verif = 1
                 else:
-                    print("não foi possivel efetuar operação, quantidade no estoque inferior a solicitada")
+                    print("Nao foi possivel efetuar operacao, quantidade no estoque inferior a solicitada")
         return verif
+        '''
+            Funcao remover da lista um produto da lista com sua quantidade a ser retirada
+
+            Parametros
+            ____
+            produtoName: variavel do tipo String
+            qtdRetirar: variavel do tipo inteiro
+            ____
+            Variaveis
+            ____
+            p: variavel do tipo Produto
+        '''

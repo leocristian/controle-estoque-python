@@ -1,3 +1,12 @@
+__author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
+__licence__= "GPL"
+__email__= "vinicius.lucas@ufpi.edu.br"
+__version__= "1.0.0.1"
+
+'''
+    A Classe Usuario cria um objeto do tipo Usuario
+'''
+
 class Usuario():
 
     __slots__ = ['_id','_usuario','_tipo']
@@ -6,6 +15,13 @@ class Usuario():
         self._id = ID
         self._usuario = pessoa
         self._tipo = tipo
+        '''
+           Atributos
+           ____
+           _id: variavel do tipo Inteiro
+           _usuario: objeto do tipo Pessoa
+           _tipo: variavel do tipo String
+        ''' 
 
     @property
     def id(self):

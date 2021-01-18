@@ -3,6 +3,15 @@ from .pessoa import Pessoa
 from .estoque import Estoque
 from .cliente import Cliente
 
+__author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
+__licence__= "GPL"
+__email__= "vinicius.lucas@ufpi.edu.br"
+__version__= "1.0.0.1"
+
+'''
+    A Classe Funcionario cria um objeto do tipo Funcionario
+'''
+
 class Funcionario():
 
     _idFuncionario = 0
@@ -13,6 +22,13 @@ class Funcionario():
         self._pessoa = _pessoa
         self._id = Funcionario._idFuncionario
         Funcionario._idFuncionario += 1
+        
+        '''
+           Atributos
+           ____
+           data_abertura: variavel do tipo time
+           _historico: lista de operacoes realizadas 
+        ''' 
     
     # @property
     # def listaclientes(self):

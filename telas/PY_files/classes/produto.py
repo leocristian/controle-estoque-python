@@ -1,4 +1,12 @@
 from random import randint
+__author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
+__licence__= "GPL"
+__email__= "vinicius.lucas@ufpi.edu.br"
+__version__= "1.0.0.1"
+
+'''
+    A Classe Produto cria um objeto do tipo Produto
+'''
 
 
 class Produto():
@@ -12,6 +20,14 @@ class Produto():
         self._preco = preco
         self._qtd = qtd 
         Produto._idNum+=1
+        '''
+           Atributos
+           ____
+           _id: variavel do tipo Inteiro
+           _descricao: variavel do tipo String
+           _preco: variavel do tipo Float
+           _qtd: variavel do tipo inteiro
+        ''' 
 
     @property
     def id(self):

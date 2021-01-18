@@ -1,3 +1,12 @@
+__author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
+__licence__= "GPL"
+__email__= "vinicius.lucas@ufpi.edu.br"
+__version__= "1.0.0.1"
+
+'''
+    A Classe Pessoa cria um objeto do tipo Pessoa
+'''
+
 class Pessoa():
 
     __slots__ = ['_nome','_cpf','_endereco','_telefone','_idade','_email']
@@ -9,6 +18,16 @@ class Pessoa():
         self._idade = idade
         self._telefone = telefone
         self._email = email
+        '''
+           Atributos
+           ____
+           _nome: variavel do tipo String
+           _cpf: variavel do tipo String
+           _endereco: variavel do tipo String
+           _idade: variavel do tipo inteiro
+           _telefone: variavel do tipo inteiro
+           _email: variavel do tipo String
+        ''' 
 
     @property
     def nome(self):
