@@ -2,7 +2,7 @@ import socket
 import json
 from pessoa import Pessoa
 
-HOST, PORT = "localhost", 6666
+HOST, PORT = "localhost", 4444
 
 socketObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socketObj.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -31,7 +31,6 @@ while True:
 
     print(type(data.decode()))
 
-
     dataFormated = json.loads(data.decode())
 
     nome = dataFormated["nome"]
@@ -53,6 +52,7 @@ while True:
         print(i.nome)
 
     print("--------------------")
+    print("Aguardando dados do cliente.")
 
 print("Fechando conexao...")
 conn.close()
