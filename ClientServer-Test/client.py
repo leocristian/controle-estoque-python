@@ -47,7 +47,7 @@ def main():
             break
 
         elif opMenu == 1:
-            pass
+            sockObj.send("1".encode())
 
         elif opMenu == 2:
             # recebe os dados vindos da função cadPessoa em forma de dicionario
@@ -61,8 +61,8 @@ def main():
             received = sockObj.recv(1024)
             received = received.decode("utf-8")
 
-        print(f"Dado enviado: {dataJson}")
-        print(f"Dado recebido: {received}")
+            print(f"Dado enviado: {dataJson}")
+            print(f"Dado recebido: {received}")
 
 
 if __name__ == "__main__":

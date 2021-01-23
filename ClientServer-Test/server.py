@@ -23,33 +23,33 @@ print(f"Conectado no endereço: {ender}")
 
 while True:
     data = conn.recv(1024)
+    print("Mensagem recebida: ", data.decode())
 
     if not data:
         break
+    elif (data.decode() == "1"):
+        print("entrou")
+    elif (data.decode() == "2"):
 
-    print("Mensagem recebida: ", data.decode())
+        dataFormated = json.loads(data.decode())
 
-    print(type(data.decode()))
+        nome = dataFormated["nome"]
+        cpf = dataFormated["cpf"]
+        end = dataFormated["end"]
+        tel =  dataFormated["tel"]
+        idade = dataFormated["idade"]
+        email = dataFormated["email"]
 
-    dataFormated = json.loads(data.decode())
+        pessoa = Pessoa(nome, cpf, end, tel, idade, email)
 
-    nome = dataFormated["nome"]
-    cpf = dataFormated["cpf"]
-    end = dataFormated["end"]
-    tel =  dataFormated["tel"]
-    idade = dataFormated["idade"]
-    email = dataFormated["email"]
+        listaPessoas.append(pessoa)
 
-    pessoa = Pessoa(nome, cpf, end, tel, idade, email)
+        conn.send(data)
 
-    listaPessoas.append(pessoa)
+        print("--------lista-------")
 
-    conn.send(data)
-
-    print("--------lista-------")
-
-    for i in listaPessoas:
-        print(i.nome)
+        for i in listaPessoas:
+            print(i.nome)
 
     print("--------------------")
     print("Aguardando dados do cliente.")
