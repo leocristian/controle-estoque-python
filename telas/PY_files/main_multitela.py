@@ -1,5 +1,7 @@
 import sys
 import os
+import socket
+import json
 
 import classes
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -28,6 +30,9 @@ __author__ = "Lucas Vinicius, Rubenilson de Sousa, Leonardo Cristian"
 __licence__= "GPL"
 __email__= "leonardosclopes@gmail.com"
 __version__= "1.0.0.1"
+
+HOST, PORT = "localhost", 5000
+sockObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 '''
     A classe Ui_main eh responsavel por fazer o gerenciamento de todas as telas
@@ -103,6 +108,8 @@ class Ui_Main(QtWidgets.QWidget):
     dos dados que serão mostrados em cada tela 
 '''
 class Main(QMainWindow, Ui_Main):
+    sockObj.connect((HOST, PORT))
+    print("Conexao estabelecida.")
     def __init__(self, parent=None):
 
         super(Main, self).__init__(parent)
@@ -148,7 +155,7 @@ class Main(QMainWindow, Ui_Main):
     def cadPessoa(self):
         '''
             Metodo responsavel por cadastrar um objeto do tipo pessoa
-            com os atributos digitados pelo usuario na tela de cadastrar funionarios
+            com os atributos digitados pelo usuario na tela de cadastrar funcionarios
 
             Retorno
             ____
@@ -162,6 +169,12 @@ class Main(QMainWindow, Ui_Main):
         email = self.cadastrar_funcionario.lineEdit_6.text()
         p = None
         if not(nome == '' or cpf == '' or end == '' or telefone == '' or idade == '' or email == ''):
+
+            dadoEnviar = {"tipo": "funcionario", "nome": nome, "cpf": cpf, "end": end, "tel": telefone, "idade": idade, "email": email}
+
+            dataJson = json.dumps(dadoEnviar)
+            sockObj.sendall(bytes(dataJson, encoding="utf-8"))
+
             p = Pessoa(nome,cpf,end,telefone,idade,email)
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_funcionario.lineEdit.setText('')
@@ -189,7 +202,12 @@ class Main(QMainWindow, Ui_Main):
         email = self.cadastrar_cliente_tela.lineEdit_6.text()
         p = None
         if not(nome == '' or cpf == '' or end == '' or telefone == '' or idade == '' or email == ''):
-            p = Pessoa(nome,cpf,end,telefone,idade,email)
+
+            dadoEnviar = {"tipo": "cliente", "nome": nome, "cpf": cpf, "end": end, "tel": telefone, "idade": idade, "email": email}
+
+            dataJson = json.dumps(dadoEnviar)
+            sockObj.sendall(bytes(dataJson, encoding="utf-8"))
+
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_cliente_tela.lineEdit.setText('')
             self.cadastrar_cliente_tela.lineEdit_2.setText('')
