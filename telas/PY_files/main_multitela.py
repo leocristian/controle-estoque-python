@@ -176,6 +176,11 @@ class Main(QMainWindow, Ui_Main):
             sockObj.sendall(bytes(dataJson, encoding="utf-8"))
 
             p = Pessoa(nome,cpf,end,telefone,idade,email)
+
+            dadoRecebido = sockObj.recv(1024)
+
+            print("dado recebido (cadPessoa): ", dadoRecebido.decode())
+        
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_funcionario.lineEdit.setText('')
             self.cadastrar_funcionario.lineEdit_2.setText('')
@@ -205,8 +210,19 @@ class Main(QMainWindow, Ui_Main):
 
             dadoEnviar = {"tipo": "cliente", "nome": nome, "cpf": cpf, "end": end, "tel": telefone, "idade": idade, "email": email}
 
-            dataJson = json.dumps(dadoEnviar)
+            dataJson = json.dumps(dadoEnviar)   
             sockObj.sendall(bytes(dataJson, encoding="utf-8"))
+
+            dadoRecebido = sockObj.recv(1024)
+
+            print("dado recebido (cadCliente): ", dadoRecebido.decode())
+
+            p = json.loads(dadoRecebido.decode())
+
+            print("dado após json load: ", p)
+            print(type(p))
+
+            #self.clientList.append(p)
 
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_cliente_tela.lineEdit.setText('')
@@ -225,14 +241,29 @@ class Main(QMainWindow, Ui_Main):
         '''
             Metodo responsavel por mostrar os produtos que estao no estoque
         '''
+        sockObj.send("mostrarEstoque".encode())
+    
+        produtos = sockObj.recv(1024)
+        print("dado recebido (telaProdutos): ", produtos.decode())
+
+        produtosStr = produtos.decode()
+        
         self.listar_produtos_tela.listWidget.clear()
-        if(len(self.estoque.produtos) == 0):
+        if(produtosStr == "vazia"):
             QMessageBox.information(None,'POO2','Sem produtos cadastrados!')
         else:
+            listaProdServer = produtosStr.split(";")
+
+            print("lista prod: ", listaProdServer)
+
             self.QtStack.setCurrentIndex(7)
-            for i in self.estoque.produtos:
-                print(i.nome)
-                self.listar_produtos_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.nome} -- Qtd: {i.qtd} -- Preco: {i.preco}")
+
+            for i in listaProdServer:
+                print(type(i))
+                iDict = json.loads(i)
+                print(type(iDict))
+
+                self.listar_produtos_tela.listWidget.addItem(f'ID: -- Nome: {iDict["nome"]} -- Qtd: {iDict["qtd"]} -- Preco: {iDict["preco"]}')
             
             self.listar_produtos_tela.btnVoltar.clicked.connect(self.voltarMenuFuncionario)
 
@@ -248,9 +279,21 @@ class Main(QMainWindow, Ui_Main):
         desc = self.cadastrar_produto_tela.lineEdit_2.text()
         preco = self.cadastrar_produto_tela.lineEdit_3.text()
         qtd = int(self.cadastrar_produto_tela.lineEdit_4.text())
+
         prod = None
         if not(nome == '' or desc == '' or preco == '' or qtd == ''):
-            prod = Produto(nome, desc, preco, qtd)
+
+            dadoEnviar = {"tipo": "produto", "nome": nome, "desc": desc, "preco": preco, "qtd": qtd}
+
+            dataJson = json.dumps(dadoEnviar)
+            sockObj.sendall(bytes(dataJson, encoding="utf-8"))
+
+            dadoRecebido = sockObj.recv(1024)
+
+            print("dado recebido (cadProdutos): ", dadoRecebido.decode())
+
+            prod = json.loads(dadoRecebido.decode())
+            #prod = Produto(nome, desc, preco, qtd)
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_produto_tela.lineEdit.setText('')
             self.cadastrar_produto_tela.lineEdit_2.setText('')
@@ -263,11 +306,13 @@ class Main(QMainWindow, Ui_Main):
             Metodo responsavel por armazenar o produto no estoque
         '''
         prod = self.cadastrarProduto()
+
+        print("produto: ", prod)
         if prod == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
         else:
-            self.estoque.armazenar(prod)
-            print(prod.nome, prod.preco)
+            #self.estoque.armazenar(prod)
+            print(prod["nome"], prod["preco"])
 #--------------------------------------------------------------------------- TELA VENDER PRODUTO
 
     def vendaProduto(self):
@@ -320,7 +365,6 @@ class Main(QMainWindow, Ui_Main):
                 
             self.vendaProduto()
 
-
             self.vender_produto_tela.btnVender.clicked.connect(self.telaVenderProduto)
             self.vender_produto_tela.btnVoltar.clicked.connect(self.voltarMenuFuncionario)
 
@@ -333,10 +377,8 @@ class Main(QMainWindow, Ui_Main):
         if p1 == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
         else: 
-            p1 = Cliente(p1)
-            print(p1.pessoa.nome, p1.pessoa.cpf)
-            self.clientList.append(p1)
-
+            print(p1["nome"], p1["cpf"])
+            #self.clientList.append(p1["nome"])
             self.cadastrar_cliente_tela.cadastrarVoltar.clicked.connect(self.voltarMenuFuncionario)
 
     def CadastrorDeFuncionario(self):
@@ -357,13 +399,27 @@ class Main(QMainWindow, Ui_Main):
         '''
             Metodo reponsavel por exibir os funcionarios na tela
         '''
-        self.funcionarios_tela.listWidget.clear()
-        if(len(self.funcList) == 0):
-                #self.funcionarios_tela.listWidget.addItem('Sem funcionários cadastrados!')
-                QMessageBox.information(None,'POO2','Sem funcionários cadastrados!')
+        sockObj.send("mostrarFuncionario".encode())
+
+        funcionarios = sockObj.recv(1024)
+
+        print("dado recebido (telaFunc): ", funcionarios.decode())
+        funcionariosStr = funcionarios.decode() # converte os dados (bytes) em string
+
+        if(funcionariosStr == "vazia"):
+            QMessageBox.information(None,'POO2','Sem FuncionariosS cadastrados!')    
         else:
-            for i in self.funcList:
-                self.funcionarios_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.pessoa.nome}")
+            listaFuncionariosServer = funcionariosStr.split(",")
+    
+            self.funcionarios_tela.listWidget.clear()
+            countFunc = 0
+
+            for i in listaFuncionariosServer:
+                print("func: ", i)
+                print(type(i))
+
+                self.funcionarios_tela.listWidget.addItem(f"ID: {countFunc} -- Nome: {i}")
+                countFunc += 1
 
             self.funcionarios_tela.btnEscolherFunc.clicked.connect(self.abrirMenuFuncionario)
 
@@ -371,16 +427,28 @@ class Main(QMainWindow, Ui_Main):
         '''
             Metodo responsavel por exibir os clientes na tela
         '''
-        self.listar_clientes_tela.listWidget.clear()
-        if(len(self.clientList) == 0):
-            QMessageBox.information(None,'POO2','Sem clientes cadastrados!')
+        sockObj.send("mostrarClientes".encode())
+
+        clientes = sockObj.recv(1024)
+
+        print("dado recebido (telaClientes): ", clientes.decode())
+        clientesStr = clientes.decode() # converte os dados (bytes) em string
+
+        if(clientesStr == "vazia"):
+            QMessageBox.information(None,'POO2','Sem clientes cadastrados!')    
         else:
+            listaClienteServer = clientesStr.split(",")
+    
+            self.listar_clientes_tela.listWidget.clear()
             self.QtStack.setCurrentIndex(5)
-            for i in self.clientList:
-                print(i.pessoa.nome)
-                self.listar_clientes_tela.listWidget.addItem(f"ID: {i.id} -- Nome: {i.pessoa.nome}")
-            
-            
+
+            countCli = 0
+            for i in listaClienteServer:
+                print("cliente: ", i)
+                print(type(i))
+
+                self.listar_clientes_tela.listWidget.addItem(f"ID: {countCli}-- Nome: {i}")
+                countCli += 1
 
     def abrirMenuFuncionario(self):
         '''
@@ -429,10 +497,22 @@ class Main(QMainWindow, Ui_Main):
     def telaVerHistorico(self):
         self.QtStack.setCurrentIndex(9)
         self.historico_estoque.listWidget.clear()
-        his = self.estoque.mostraHistorico()
+
+        sockObj.send("mostrarHistorico".encode())
+
+        histServerStr = sockObj.recv(1024)
+        histServerStr = histServerStr.decode()
+
+        if(histServerStr == "vazio"):
+            print("Historico vazio")
+        else:
+            print("historico server: ", histServerStr)
+
+            listHistServer = histServerStr.split(";")
+    
         # self.historico_estoque.listView.appendRow(f"{text}")
-        for t in his:
-            self.historico_estoque.listWidget.addItem(f"{t}")
+            for his in listHistServer:
+                self.historico_estoque.listWidget.addItem(f"{his}")
 
 
     def voltarMenuFuncionarios(self):

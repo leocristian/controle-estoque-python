@@ -17,6 +17,7 @@ class Estoque():
     def __init__(self,):
         self._data_abertura = datetime.datetime.today()
         self._historico = []
+        self._historico.append("A data de abertuda do estoque e: {}".format(self._data_abertura))
 
         '''
            Atributos
@@ -28,31 +29,16 @@ class Estoque():
     @property
     def produtos(self):
         return Estoque._produtos
+    
+    @property
+    def historico(self):
+        return self._historico
 
-    def mostraHistorico(self):
-        his = []
-        his.append("A data de abertuda do estoque e: {}".format(self._data_abertura))
-        for t in self._historico:
-            his.append('- {}'.format(t))
-        return his
-    '''
-        Funcao mostraHistorico retorna o historico de operacoes realizadas
-
-        Parametros
-        ____
-        sem parametros alem do self
-        ____
-        Variaveis
-        ____
-        his: lista que vai armazenar o Historico
-        ____
-        Retorno
-        ____
-        his: Retorna a lista contendo todo o Historico de operacoes
-    '''    
 
     def armazenar(self,produto):
         achou = False
+
+        
         for p in Estoque._produtos:
             if(p.nome == produto.nome.upper()):
                 p.qtd += produto.qtd
