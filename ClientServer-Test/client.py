@@ -48,6 +48,8 @@ def main():
 
         elif opMenu == 1:
             sockObj.send("1".encode())
+            received = sockObj.recv(1024)
+            print("Dado recebido: ", received.decode())
 
         elif opMenu == 2:
             # recebe os dados vindos da função cadPessoa em forma de dicionario

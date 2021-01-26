@@ -24,12 +24,24 @@ print(f"Conectado no endereço: {ender}")
 while True:
     data = conn.recv(1024)
     print("Mensagem recebida: ", data.decode())
+    listaNomes = []
 
     if not data:
         break
     elif (data.decode() == "1"):
         print("entrou")
-    elif (data.decode() == "2"):
+
+        if  len(listaPessoas) >= 1:
+            for i in listaPessoas:
+                nome = i.nome
+                listaNomes.append(nome)
+            dataSend = ",".join(listaNomes)
+            print("Data Sent: ", dataSend)
+            conn.send(dataSend.encode())
+        else:
+            conn.send("Lista vazia!!".encode())
+
+    else:
 
         dataFormated = json.loads(data.decode())
 
