@@ -113,7 +113,7 @@ while True:
             
                 conn.send(";".join(listaHist).encode())
 
-    #--------------------------------Comandos para realizar alguma operação no servidor (cadastro, remoção)--------
+    #--------------------------------Comandos para realizar alguma operação no servidor (cadastro, remoção, venda)--------
         else:
             print("entrou else")
             dataFormated = json.loads(data.decode()) # Converte dado recebido (str) em um dicionário
@@ -122,7 +122,25 @@ while True:
 
             print("Tipo: ", tipo)
 
-            if tipo == "produto":
+            if tipo == "venderProduto": # significa que o usuário quer realizar uma venda
+        
+                idCliente = int(dataFormated["idCliente"])
+                nomeProduto = dataFormated["nomeProduto"]
+                qtdprod = int(dataFormated["qtdProd"])
+
+                print("id cli: ", idCliente)
+                print("Nome prod: ", nomeProduto)
+                print("qtd: ", qtdprod)
+                
+                confirmRemocao = estoque.remover(nomeProduto, qtdprod)
+
+                print("Confirm Remocao: ", confirmRemocao)
+                if(confirmRemocao == 1):
+                    conn.send("produtoVendido".encode())
+                else:
+                    conn.send("erroVenda".encode())
+
+            elif tipo == "produto":
                 nome = dataFormated["nome"]
                 desc = dataFormated["desc"]
                 preco = dataFormated["preco"]
@@ -132,6 +150,8 @@ while True:
 
                 estoque.armazenar(prod)
                 qtdprod += 1
+
+                conn.send("produtoCadastrado".encode())
 
             else: # significa que o dado enviado é de uma pessoa
 
@@ -147,13 +167,17 @@ while True:
                     pessoa = Pessoa(nome, cpf, end, tel, idade, email)
 
                     listaFuncionarios.append(pessoa)
+            
+                    conn.send("funcionarioCadastrado".encode())
 
                 elif tipo == "cliente":  # Mostra que a pessoa enviada é um cliente
                     pessoa = Pessoa(nome, cpf, end, tel, idade, email)
 
                     listaClientes.append(pessoa)
 
-            conn.send(data)
+                    conn.send("clienteCadastrado".encode())
+
+            #conn.send(data)
 
     print("--------lista funcionarios-------")
 

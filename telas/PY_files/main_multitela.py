@@ -217,12 +217,7 @@ class Main(QMainWindow, Ui_Main):
 
             print("dado recebido (cadCliente): ", dadoRecebido.decode())
 
-            p = json.loads(dadoRecebido.decode())
-
-            print("dado após json load: ", p)
-            print(type(p))
-
-            #self.clientList.append(p)
+            p = dadoRecebido.decode()
 
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_cliente_tela.lineEdit.setText('')
@@ -292,7 +287,7 @@ class Main(QMainWindow, Ui_Main):
 
             print("dado recebido (cadProdutos): ", dadoRecebido.decode())
 
-            prod = json.loads(dadoRecebido.decode())
+            prod = dadoRecebido.decode()
             #prod = Produto(nome, desc, preco, qtd)
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_produto_tela.lineEdit.setText('')
@@ -307,12 +302,11 @@ class Main(QMainWindow, Ui_Main):
         '''
         prod = self.cadastrarProduto()
 
-        print("produto: ", prod)
         if prod == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
         else:
             #self.estoque.armazenar(prod)
-            print(prod["nome"], prod["preco"])
+            print("dado recebido: ", prod)
 #--------------------------------------------------------------------------- TELA VENDER PRODUTO
 
     def vendaProduto(self):
@@ -325,43 +319,67 @@ class Main(QMainWindow, Ui_Main):
             nomeP: String que ira armazenar o nome do produto
             qtd: Variavel inteira que ira armazenar a quantidade de produtos para venda
         '''
-        verif = 0
 
-        ID = self.vender_produto_tela.lineEdit.text()
-        nomeP = self.vender_produto_tela.lineEdit_2.text()
-        qtd = self.vender_produto_tela.lineEdit_3.text()
+        clienteID = self.vender_produto_tela.lineEdit.text()
+        nomeProd = self.vender_produto_tela.lineEdit_2.text()
+        qtdProd = self.vender_produto_tela.lineEdit_3.text()
 
+        print("id cli: ", clienteID)
+        print("Nome prod: ", nomeProd)
+        print("qtd: ", qtdProd)
 
-        if not(ID == '' or nomeP == '' or qtd == ''):
-            qtd = int(qtd)
-            ID = int(ID)
-            for i in self.clientList:
-                if ID == i.id:
-                    verif = self.estoque.remover(nomeP, qtd)
-                    self.vender_produto_tela.lineEdit.setText('')
-                    self.vender_produto_tela.lineEdit_2.setText('')
-                    self.vender_produto_tela.lineEdit_3.setText('')
-            if(verif == 1):
+        if not(clienteID == '' or nomeProd == '' or qtdProd == ''):
+            qtdProd = int(qtdProd)
+            clienteID = int(clienteID)
+
+            objVender = {"tipo": "venderProduto", "idCliente": clienteID, "nomeProduto": nomeProd, "qtdProd": qtdProd}
+
+            objVenderJson = json.dumps(objVender)
+            sockObj.sendall(bytes(objVenderJson, encoding="utf-8"))
+
+            dadoRecebido = sockObj.recv(1024)
+
+            print("dado recebido (venderProduto): ", dadoRecebido.decode())
+
+            if(dadoRecebido.decode() == "produtoVendido"):
                 QMessageBox.information(None,'POO2','Produto Vendido!')
+
+                self.vender_produto_tela.lineEdit.setText('')
+                self.vender_produto_tela.lineEdit_2.setText('')
+                self.vender_produto_tela.lineEdit_3.setText('')
             else:
                 QMessageBox.information(None,'POO2','ERRO! Operação não concluida. Verifique os dados inseridos.')
-                
+    
                 
     def telaVenderProduto(self):
         self.vender_produto_tela.listWidget.clear()
         self.vender_produto_tela.listWidget_2.clear()
 
-        if(len(self.estoque.produtos) == 0 or len(self.clientList) == 0):
+        sockObj.send("mostrarClientes".encode())
+
+        clientes = sockObj.recv(1024)
+
+        print("dado recebido (telaVenderProduto): ", clientes.decode())
+        clientesStr = clientes.decode() # converte os dados (bytes) em string
+
+        if(clientesStr == "vazia"):
             QMessageBox.information(None,'POO2','Sem produtos ou clientes cadastrados!')
         else:
-            self.QtStack.setCurrentIndex(8)
-            for i in self.estoque.produtos:
-                print(i.nome)
-                self.vender_produto_tela.listWidget_2.addItem(f"Nome: {i.nome} -- Qtd: {i.qtd}")
 
-            for x in self.clientList:
-                print(x.pessoa.nome)
-                self.vender_produto_tela.listWidget.addItem(f"ID: {x.id} -- Nome: {x.pessoa.nome}")
+            listaClienteServer = clientesStr.split(",")
+    
+            self.QtStack.setCurrentIndex(8)
+            # for i in self.estoque.produtos:
+            #     print(i.nome)
+            #     self.vender_produto_tela.listWidget_2.addItem(f"Nome: {i.nome} -- Qtd: {i.qtd}")
+
+            countCli = 0
+            for i in listaClienteServer:
+                print("cliente: ", i)
+                print(type(i))
+
+                self.vender_produto_tela.listWidget.addItem(f"ID: {countCli}-- Nome: {i}")
+                countCli += 1
                 
             self.vendaProduto()
 
@@ -377,7 +395,7 @@ class Main(QMainWindow, Ui_Main):
         if p1 == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
         else: 
-            print(p1["nome"], p1["cpf"])
+            print(p1)
             #self.clientList.append(p1["nome"])
             self.cadastrar_cliente_tela.cadastrarVoltar.clicked.connect(self.voltarMenuFuncionario)
 

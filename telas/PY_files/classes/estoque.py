@@ -84,16 +84,6 @@ class Estoque():
         '''
 
     def remover(self,produtoName,qtdRetirar):
-        verif = 0
-        for p in Estoque._produtos:
-            if(p.nome == produtoName.upper()):
-                if(qtdRetirar <= p.qtd):
-                    p.qtd -= qtdRetirar
-                    self._historico.append("Remocao de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
-                    verif = 1
-                else:
-                    print("Nao foi possivel efetuar operacao, quantidade no estoque inferior a solicitada")
-        return verif
         '''
             Funcao remover da lista um produto da lista com sua quantidade a ser retirada
 
@@ -106,3 +96,13 @@ class Estoque():
             ____
             p: variavel do tipo Produto
         '''
+        verif = 0
+        for p in Estoque._produtos:
+            if(p.nome == produtoName.upper()):
+                if(qtdRetirar <= p.qtd):
+                    p.qtd -= qtdRetirar
+                    self._historico.append("Remocao de {} efetuada. quantidade atual: {}".format(p.nome,p.qtd))
+                    verif = 1
+                else:
+                    print("Nao foi possivel efetuar operacao, quantidade no estoque inferior a solicitada")
+        return verif
