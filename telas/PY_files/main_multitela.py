@@ -219,6 +219,7 @@ class Main(QMainWindow, Ui_Main):
 
             p = dadoRecebido.decode()
 
+
             QMessageBox.information(None,'POO2','Cadastro Realizado com Sucesso!!')
             self.cadastrar_cliente_tela.lineEdit.setText('')
             self.cadastrar_cliente_tela.lineEdit_2.setText('')
@@ -302,17 +303,16 @@ class Main(QMainWindow, Ui_Main):
         '''
         prod = self.cadastrarProduto()
 
+        print("produto: ", prod)
         if prod == None:
             QMessageBox.information(None,'POO2','Todos os Campos Devem ser Preenchidos!!')
         else:
             #self.estoque.armazenar(prod)
             print("dado recebido: ", prod)
 #--------------------------------------------------------------------------- TELA VENDER PRODUTO
-
     def vendaProduto(self):
         '''
             Metodo reponsavel por realizar o a venda de um produto a um cliente
-
             Atributos
             ____
             ID: Variavel inteira que ira guardar o id do cliente a qual o produto sera vendido
@@ -350,7 +350,6 @@ class Main(QMainWindow, Ui_Main):
             else:
                 QMessageBox.information(None,'POO2','ERRO! Operação não concluida. Verifique os dados inseridos.')
     
-                
     def telaVenderProduto(self):
         self.vender_produto_tela.listWidget.clear()
         self.vender_produto_tela.listWidget_2.clear()
@@ -362,17 +361,27 @@ class Main(QMainWindow, Ui_Main):
         print("dado recebido (telaVenderProduto): ", clientes.decode())
         clientesStr = clientes.decode() # converte os dados (bytes) em string
 
-        if(clientesStr == "vazia"):
+        sockObj.send("mostrarEstoque".encode())
+    
+        produtos = sockObj.recv(1024)
+        print("dado recebido (telaProdutos): ", produtos.decode())
+
+        produtosStr = produtos.decode()
+
+        if(clientesStr == "vazia" or produtosStr == "vazia"):
             QMessageBox.information(None,'POO2','Sem produtos ou clientes cadastrados!')
         else:
-
             listaClienteServer = clientesStr.split(",")
+            listaProdServer = produtosStr.split(";")
     
             self.QtStack.setCurrentIndex(8)
-            # for i in self.estoque.produtos:
-            #     print(i.nome)
-            #     self.vender_produto_tela.listWidget_2.addItem(f"Nome: {i.nome} -- Qtd: {i.qtd}")
+            for i in listaProdServer:
+                print(type(i))
+                iDict = json.loads(i)
+                print(type(iDict))
 
+                self.vender_produto_tela.listWidget_2.addItem(f'ID: -- Nome: {iDict["nome"]} -- Qtd: {iDict["qtd"]} -- Preco: {iDict["preco"]}')
+            
             countCli = 0
             for i in listaClienteServer:
                 print("cliente: ", i)
