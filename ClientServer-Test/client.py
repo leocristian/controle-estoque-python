@@ -18,7 +18,7 @@ def menuPrincipal():
 
     return esc
 
-def cadPessoa():
+def cadPessoa(countId):
 
     print("**************** CADASTRO DA PESSOA *******************")
     print("------------------------------------------------------------")
@@ -29,11 +29,12 @@ def cadPessoa():
     idade = int(input("------------- IDADE: "))
     email = input("------------- E-MAIL: ")
 
-    msg = {"id": 1, "nome": nome, "cpf": cpf, "end": end, "tel": telefone, "idade": idade, "email": email}
+    msg = {"id": countId, "nome": nome, "cpf": cpf, "end": end, "tel": telefone, "idade": idade, "email": email}
 
     return msg
 
 def main():
+    countId = 0
 
     sockObj.connect((HOST, PORT))
     print("Conexao estabelecida.")
@@ -53,7 +54,8 @@ def main():
 
         elif opMenu == 2:
             # recebe os dados vindos da função cadPessoa em forma de dicionario
-            dataDict = cadPessoa()
+            countId += 1
+            dataDict = cadPessoa(countId)
 
             # converte os dados em um objeto JSON para enviar pro servidor
             dataJson = json.dumps(dataDict)

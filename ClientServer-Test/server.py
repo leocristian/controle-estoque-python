@@ -2,6 +2,12 @@ import socket
 import json
 from pessoa import Pessoa
 
+import sqlite3
+
+database = sqlite3.connect("database.db")
+
+cursor = database.cursor()
+
 HOST, PORT = "localhost", 4444
 
 socketObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -13,6 +19,11 @@ socketObj.bind(addr)
 socketObj.listen(10)
 
 listaPessoas = []
+try:
+    cursor.execute('''CREATE TABLE IF NOT EXISTS pessoas(id integer PRIMARY KEY, nome text NOT NULL, cpf text NOT NULL, endereco text, telefone text, idade integer, email text)''')
+    print("Tabela Pessoas Criada")
+except:
+    print("Erro ao criar tabela.")
 
 print("Servidor iniciado!")
 print("Aguardando um cliente...")
@@ -54,6 +65,8 @@ while True:
 
         pessoa = Pessoa(nome, cpf, end, tel, idade, email)
 
+        cursor.execute("INSERT INTO pessoas (nome, cpf, endereco, telefone, idade, email) VALUES (?, ?, ?, ?, ?, ?)", (nome, cpf, end, tel, idade, email))
+
         listaPessoas.append(pessoa)
 
         conn.send(data)
@@ -63,8 +76,19 @@ while True:
         for i in listaPessoas:
             print(i.nome)
 
-    print("--------------------")
     print("Aguardando dados do cliente.")
+    print("--------------------")
+    print("Tabela pessoas:")
+
+    cursor.execute('SELECT * FROM pessoas')
+
+    for x in cursor:
+        print(x)
+    
+    database.commit()
+
+
 
 print("Fechando conexao...")
+database.close()
 conn.close()
