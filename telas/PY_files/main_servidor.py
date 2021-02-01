@@ -74,12 +74,13 @@ while True:
 
             print("quantidade de produtos: ", qtdprod)
             cursor.execute("SELECT * FROM estoque")
-
+            
             print("Produtos---------")
-    
+            
             if(qtdprod == 0):
                 print("Estoque vazio..")
                 conn.send("vazia".encode())
+            
             else:
                 for i in cursor:
                     prodDict = {"nome": i[1], "preco": i[3], "qtd": i[4]}
@@ -167,7 +168,8 @@ while True:
             elif tipo == "produto":
                 nome = dataFormated["nome"]
                 desc = dataFormated["desc"]
-                preco = dataFormated["preco"]
+                preco = dataFormated["nome"]
+                cpf = dataFormated["preco"]
                 qtd = dataFormated["qtd"]
 
                 prod = Produto(nome, desc, preco, qtd)
