@@ -71,28 +71,26 @@ while True:
 
         elif(data.decode() == "mostrarEstoque"):
             listaProdutos = []
-            
+
             print("quantidade de produtos: ", qtdprod)
             cursor.execute("SELECT * FROM estoque")
 
             print("Produtos---------")
-            for p in cursor:
-                print(p)
-
+    
             if(qtdprod == 0):
                 print("Estoque vazio..")
                 conn.send("vazia".encode())
             else:
-                
-                for i in estoque.produtos:
-                    prodDict = {"nome": i.nome, "preco": i.preco, "qtd": i.qtd}
+                for i in cursor:
+                    prodDict = {"nome": i[1], "preco": i[3], "qtd": i[4]}
+                    print(prodDict)
                     prodDict = json.dumps(prodDict)
                     listaProdutos.append(prodDict)
-                    print(i.nome)
+                    print(i)
 
                 print("Enviando estoque...")
-
                 conn.send(";".join(listaProdutos).encode())
+                
 
         elif(data.decode() == "mostrarClientes"):
             print("enviando clientes...")
@@ -148,6 +146,7 @@ while True:
                 print("qtd: ", qtdprod)
 
                 cursor.execute("SELECT qtd FROM estoque WHERE nome=?", (nomeProduto, ))
+
                 for x in cursor:
                     qtdAtual = x[0]
 
@@ -157,10 +156,10 @@ while True:
                 cursor.execute("UPDATE estoque SET qtd=? WHERE nome=?", ((qtdAtual - qtdprod), nomeProduto))
                 database.commit()
 
-                confirmRemocao = estoque.remover(nomeProduto, qtdprod)
+                estoque.historico.append("Remocao de {} efetuada. quantidade atual: {}".format(nomeProduto,(qtdAtual-qtdprod)))
 
-                print("Confirm Remocao: ", confirmRemocao)
-                if(confirmRemocao == 1):
+                print("cursor: ", cursor)
+                if(cursor):
                     conn.send("produtoVendido".encode())
                 else:
                     conn.send("erroVenda".encode())
