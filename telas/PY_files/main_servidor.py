@@ -1,5 +1,7 @@
 import socket
 import json
+import sqlite3
+
 from classes.pessoa import Pessoa
 from classes.produto import Produto
 from classes.estoque import Estoque
@@ -14,17 +16,22 @@ addr = ((HOST, PORT))
 socketObj.bind(addr)
 socketObj.listen(10)
 
-listaPessoas = []
-
 print("Servidor iniciado!")
 print("Aguardando um cliente...")
 
 conn, ender = socketObj.accept()
 
+database = sqlite3.connect("database.sqlite")
+cursor = database.cursor()
+
 print(f"Conectado no endereço: {ender}")
 
 listaFuncionarios = []
 listaClientes = []
+
+cursor.execute('''CREATE TABLE IF NOT EXISTS funcionarios(id integer PRIMARY KEY, nome text NOT NULL, cpf text NOT NULL, endereco text, telefone text, idade integer, email text)''')
+cursor.execute('''CREATE TABLE IF NOT EXISTS clientes(id integer PRIMARY KEY, nome text NOT NULL, cpf text NOT NULL, endereco text, telefone text, idade integer, email text)''')
+cursor.execute('''CREATE TABLE IF NOT EXISTS estoque(id integer PRIMARY KEY, nome text NOT NULL, desc text, preco real NOT NULL, qtd integer NOT NULL)''')
 
 estoque = Estoque()
 
@@ -47,6 +54,10 @@ while True:
             nomesFunc = []
 
             print("for listafunc")
+            cursor.execute("SELECT * FROM funcionarios")
+            for f in cursor:
+                print(f[1])
+                #nomesFunc.append(f[1])
 
             if len(listaFuncionarios) == 0:
                 print("Lista vazia...")
@@ -62,6 +73,11 @@ while True:
             listaProdutos = []
             
             print("quantidade de produtos: ", qtdprod)
+            cursor.execute("SELECT * FROM estoque")
+
+            print("Produtos---------")
+            for p in cursor:
+                print(p)
 
             if(qtdprod == 0):
                 print("Estoque vazio..")
@@ -93,7 +109,6 @@ while True:
                     print(i.nome)
                     nomesClientes.append(i.nome)
                 
-            #conn.send("test".encode())
                 conn.send(",".join(nomesClientes).encode())
 
         elif(data.decode() == "mostrarHistorico"):
@@ -131,7 +146,17 @@ while True:
                 print("id cli: ", idCliente)
                 print("Nome prod: ", nomeProduto)
                 print("qtd: ", qtdprod)
-                
+
+                cursor.execute("SELECT qtd FROM estoque WHERE nome=?", (nomeProduto, ))
+                for x in cursor:
+                    qtdAtual = x[0]
+
+                print("qtdAtual: ", qtdAtual)
+                print(type(qtdAtual))
+
+                cursor.execute("UPDATE estoque SET qtd=? WHERE nome=?", ((qtdAtual - qtdprod), nomeProduto))
+                database.commit()
+
                 confirmRemocao = estoque.remover(nomeProduto, qtdprod)
 
                 print("Confirm Remocao: ", confirmRemocao)
@@ -147,6 +172,9 @@ while True:
                 qtd = dataFormated["qtd"]
 
                 prod = Produto(nome, desc, preco, qtd)
+
+                cursor.execute("INSERT INTO estoque (nome, desc, preco, qtd) VALUES (?, ?, ?, ?)", (nome, desc, preco, qtd))
+                database.commit()
 
                 estoque.armazenar(prod)
                 qtdprod += 1
@@ -166,12 +194,18 @@ while True:
 
                     pessoa = Pessoa(nome, cpf, end, tel, idade, email)
 
+                    cursor.execute("INSERT INTO funcionarios (nome, cpf, endereco, telefone, idade, email) VALUES (?, ?, ?, ?, ?, ?)", (nome, cpf, end, tel, idade, email))
+                    database.commit()
+    
                     listaFuncionarios.append(pessoa)
             
                     conn.send("funcionarioCadastrado".encode())
 
                 elif tipo == "cliente":  # Mostra que a pessoa enviada é um cliente
                     pessoa = Pessoa(nome, cpf, end, tel, idade, email)
+
+                    cursor.execute("INSERT INTO clientes (nome, cpf, endereco, telefone, idade, email) VALUES (?, ?, ?, ?, ?, ?)", (nome, cpf, end, tel, idade, email))
+                    database.commit()
 
                     listaClientes.append(pessoa)
 
@@ -200,6 +234,8 @@ while True:
     print("---------------------------------")
 
 
-print("Fechando conexao...")
+print("Fechando conexao...")    
+database.commit()
+database.close()
 conn.close()
 
